@@ -1,0 +1,50 @@
+# Glossary
+
+Terms are added as they appear in the code. Plain-language definitions.
+
+- **Phase field**: a number at every point of the grid. 1 means "crystal", 0 means "fluid", values in between form a thin smooth border (the interface).
+- **Supersaturation**: how much more silica is dissolved than the fluid can hold at equilibrium at the current temperature. It is the driving force for growth.
+- **Solubility**: the maximum amount of silica a fluid can hold at equilibrium at a given temperature.
+- **Anisotropy**: the interface behaves differently depending on its direction.
+- **Facet**: a flat crystal face.
+- **c-axis**: the long axis of the quartz crystal (the direction the prism points).
+- **m, r, z faces**: the prism face {10-10} and the two rhombohedral termination faces {10-11} and {01-11}.
+- **Sector zoning**: different growth sectors (the regions swept by different faces) take up different amounts of impurities such as iron, producing color patterns.
+- **Partition coefficient**: ratio between the impurity concentration in the crystal and in the fluid it grows from.
+- **Ensemble**: a group of runs with identical settings and different random seeds.
+- **Seed (random)**: the integer that fixes the random numbers, so a run can be repeated exactly.
+- **Equilibrium concentration (c_eq)**: the silica concentration at which the fluid and the crystal are in balance. Depends on temperature.
+- **Diffusion**: dissolved silica spreading from where there is more of it to where there is less.
+- **Depletion halo**: the zone of fluid around a growing crystal where silica has been used up.
+- **Gibbs-Thomson effect**: small or strongly curved crystals are slightly more soluble, so they need a bit more supersaturation to grow.
+- **Closed container**: nothing enters or leaves, so the total silica (dissolved + in the crystal) is constant.
+- **Diffusion time scale**: how long silica takes to spread across a distance (distance squared divided by the diffusion coefficient).
+- **Kinetic anisotropy**: different crystal faces grow at different speeds because atoms attach more easily to some surfaces than to others.
+- **Frank's construction (kinetic Wulff shape)**: the shape a crystal takes when each face advances at its own constant speed. Slow faces stay as flat faces, fast faces grow out and disappear.
+- **Cusp**: a sharp V-shaped dip in the speed-versus-orientation curve at a flat face; it is what keeps a face flat.
+- **Missing orientations**: surface directions that do not appear on a faceted crystal (between two faces there is a sharp edge instead).
+- **Diffusion-limited vs surface-limited growth**: if silica arrives slowly the crystal grows at the pace of the supply and tends to be round or branched; if attaching to the surface is the slow step the supply is uniform and flat faces dominate.
+- **Capillary length**: a length that sets how strongly surface tension rounds small features. In the model it is set by epsilon and is much larger than in real quartz, so small crystals look rounder than real ones.
+- **Distribution (partition) coefficient**: how many times richer in an impurity (here iron, relative to silica) the crystal is than the fluid it grows from.
+- **Trace element**: present in such small amounts that it does not change the main process (here growth).
+- **Color center**: an iron site in the quartz that, once irradiated, absorbs light and makes the crystal violet.
+- **Seed (random)**: the integer that fixes all random numbers of a run; the same seed and settings repeat the run exactly.
+- **Support distance**: how far a shape extends in a given direction, measured from a reference point; for a flat face it is the face's distance.
+- **Snapshot**: a saved copy of the grids at one moment, used to replay the animation without recalculating.
+- **Damkohler number (Da)**: attachment speed divided by supply (diffusion) speed; small = surface-limited, large = diffusion-limited.
+- **Timeline**: the list of changes made to a run (step, time, parameter, new value). With the same seed it reproduces the run exactly.
+- **Replay**: running again from the saved settings, seed and timeline.
+- **Controller**: the part of the program that holds a run and accepts commands (pause, resume, stop, change a parameter) between steps.
+- **Ensemble**: a group of replicas of the same experiment with different random seeds; shows how much the result varies because of randomness.
+- **Replica**: one member of an ensemble.
+- **Standard deviation (std)**: a measure of how spread out the replicas are around their mean.
+- **Concurrency vs speed-up**: how many replicas run at once is not the same as how much faster the whole job finishes, because replicas slow each other down when they share the machine.
+- **API**: the list of requests a program can send to the server (create a job, pause it, read results...).
+- **WebSocket**: a connection that stays open so the server can push live frames to the browser.
+- **Job**: one simulation or ensemble managed by the server, with a status and a compute cost, running in its own process.
+- **Frame**: one picture of the crystal (and its metrics) sent to the viewer.
+- **Plateau**: a range of a parameter (here low Da) over which the result does not change any more, so any value in the range is equivalent.
+- **Implicit scheme**: a way of advancing diffusion that stays stable for any time step (it solves a linear system each step).
+- **Uniform-fluid limit**: the case where diffusion is so fast that the dissolved silica is the same everywhere.
+- **Convergence (with resolution)**: the result stops changing as the grid is made finer.
+- **Solidity**: crystal area divided by the area of its convex hull; below 1 when faces cave in or branches appear.

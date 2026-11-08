@@ -1,0 +1,45 @@
+# Sources
+
+"Read" = the text itself was read. "Summary" = only an abstract or search summary was seen.
+
+| Reference | Used for | Access |
+|---|---|---|
+| Rimstidt, J.D. (1997) Quartz solubility at low temperatures. Geochim. Cosmochim. Acta 61, 2553-2558. | Solubility curve | Coefficients read as quoted in Takeno et al. (2000) eq. 3 (original not read) |
+| Verma, M.P. Revised quartz solubility temperature dependence equation along the water-vapor saturation curve. (Geothermal conference paper; year not shown in the extracted text) | 11.0 +/- 1.1 ppm at 25 C quoted from Rimstidt; 6.6 ppm from Fournier & Potter | **Read** |
+| Fournier, R.O. & Potter, R.W. (1982) Geochim. Cosmochim. Acta 46, 1969-1973. | Alternative solubility curve | Not accessed |
+| Cohen, A.J. & Hassan, F. (1974) Ferrous and ferric ions in synthetic alpha-quartz and natural amethyst. Am. Mineral. 59, 719-728. | Iron r > z; radiation needed for color | **Read** |
+| Schlossin & Lang (1965) (X-ray topography of amethyst) | Iron in r vs z sectors, as cited by Cohen & Hassan | Second-hand |
+| Troilo, El Harfi, Mouaddib, Bittarello & Costa (2015) Amethyst from Boudi, Morocco. Gems & Gemology 51(1). | Iron on rhombohedral faces, hourglass zoning | **Read** (web text) |
+| Arduin Rode et al. (2024) World-class amethyst-agate geodes from Los Catalanes, northern Uruguay. Mineralium Deposita. | Geode temperature 15-60 C | Summary (news release + search) |
+| Levien, L., Prewitt, C.T. & Weidner, D.J. (1980) Structure and elastic properties of quartz at pressure. Am. Mineral. 65, 920-930. | Lattice parameters (a = 4.916(1), c = 5.4054(4) A at 1 atm) | **Read** (PDF from msaweb.org, abstract and Table 5; parameter audit). Used in the yaml since the parameter audit (P1) |
+| Rimstidt, J.D. & Barnes, H.L. (1980) The kinetics of silica-water reactions. Geochim. Cosmochim. Acta 44, 1683-1699. | Precipitation constant of all silica phases log k- = -0.707 - 2598/T (49.8 kJ/mol); quartz k+ via K | **First page read** (abstract and constants, copy on a university course page); rest not read |
+| Debierre, J.-M., Karma, A., Celestini, F. & Guerin, R. (2003) Phase-field approach for faceted solidification. Phys. Rev. E 68, 041604. arXiv:cond-mat/0302368 | Faceted phase-field formulation | Summary |
+| Frank's kinetic Wulff construction (standard crystal-growth theory) | Shape from face growth speeds | Not looked up in a source in this project (UNVERIFIED as a citation; used as a standard concept and checked numerically by validation check 2) |
+| Web pages on geode growth times (popular articles) | Plausibility check of growth timescale (1e5-1e6 years) | Summaries only; very weak, not scientific sources |
+| Abstracts on quartz precipitation kinetics (Rimstidt & Barnes 1980 follow-ups, quartz precipitation at 180 C) | Regime analysis in kinetic_regime.md | Summaries only; authors of the 180 C result not identified |
+| Schlossin & Lang (1965) and Cohen & Hassan (1974): Dauphine twinning lowers iron in twinned r-sector parts | Noted as ignored in the model | Second-hand via Cohen & Hassan (read) |
+| Takeno, N., Ishido, T. & Pritchett, J.W. (2000) Dissolution, transport and precipitation of silica in geothermal system. Proc. World Geothermal Congress 2000, Kyushu-Tohoku, Japan, pp. 2943-2948. | Quartz solubility (eq. 3, from Rimstidt 1997), quartz rate law (eq. 1) and rate constant (eq. 6, recalculated from Rimstidt 1997) | **Read in full** (PDF provided by Luna). Secondary source for Rimstidt (1997) and Rimstidt & Barnes (1980) |
+| Rebreanu, L., Vanderborght, J.-P. & Chou, L. (2008) The diffusion coefficient of dissolved silica revisited. Marine Chemistry 112, 230-233. | Silica diffusivity 0.58-1.17e-9 m2/s at 4-25 C, salinity 0 | **Read** (PDF, vliz.be; parameter audit) |
+| Applin, K.R. (1987) The diffusion of dissolved silica in dilute aqueous solution. Geochim. Cosmochim. Acta 51, 2147-2151. | Silica diffusivity in pure water, pH 5.5 | Not accessed (cited by Rebreanu et al. 2008) |
+| CIAAW (2024) Standard Atomic Weights. ciaaw.org/atomic-weights.htm | Atomic weights of O, Si, Fe | Page read through a web-fetch tool quoting the rows |
+| Gilg, H.A., Morteani, G., Kostitsyn, Y., Preinfalk, C., Gatter, I. & Strieder, A.J. (2003) Genesis of amethyst geodes in basaltic rocks of the Serra Geral Formation (Ametista do Sul, Brazil). Mineralium Deposita 38, 1009-1025. | Geode fluid inclusions, Brazil | Citation only (search summary) |
+| Gilg et al. (2014) Mineralium Deposita 49, 861-877, DOI 10.1007/s00126-014-0522-7 (Ametista do Sul geodes) | Cites Juchem et al. (1999): Brazilian amethyst below 50 C | Search summary only |
+| Jourdan et al. (2009) Evidence of growth and sector zoning in hydrothermal quartz from Alpine veins. Eur. J. Mineral., DOI 10.1127/0935-1221/2009/0021-1881 | Sector zoning strongest between prism and rhombohedral sectors | Abstract only (search summary) |
+| Palandri, J.L. & Kharaka, Y.K. (2004) A compilation of rate parameters of water-mineral interaction kinetics for application to geochemical modeling. U.S. Geological Survey Open-File Report 2004-1068, DOI 10.3133/ofr20041068. | Quartz neutral and base rate parameters (Table 4), rate equation (eqs. 4-6) | **Read**: eqs. 4-6, section 3.1.1.1, Tables 3-4 (not the whole report). Table 4 has two inconsistencies, see kinetic_regime.md section 10 |
+| Knauss, K.G. & Wolery, T.J. (1988) The dissolution kinetics of quartz as a function of pH and time at 70 C. (as cited by Palandri & Kharaka 2004) | Base mechanism of quartz | Not accessed |
+| Tester, J.W. et al. (1994) quartz dissolution kinetics in pure water from 25 to 625 C. Geochim. Cosmochim. Acta (as cited by Palandri & Kharaka 2004) | Neutral mechanism regression | Not accessed |
+| Brady, P.V. & Walther, J.V. (1990) Kinetics of quartz dissolution at low temperatures. Chem. Geol. (as cited by Palandri & Kharaka 2004) | pH dependence at low T | Not accessed |
+| Dove, P.M. (1994) The dissolution kinetics of quartz in sodium chloride solutions at 25 to 300 C. Am. J. Sci.; Dove, P.M. & Crerar, D.A. (1990) Kinetics of quartz dissolution in electrolyte solutions using a hydrothermal mixed flow reactor. GCA 54, 955-969 (as cited by Palandri & Kharaka 2004) | Na catalysis of the base mechanism | Not accessed |
+| Revista Aguas Subterraneas articles on the Serra Geral aquifer (pH 6.69-9.95, SW Parana, 57 wells; 6.9-9.7, Sao Paulo) | Plausible pH bracket of basalt groundwater | Search summaries only (UNVERIFIED); authors not recorded |
+| Thiede, D.S. & Vasconcelos, P.M. (2010) Parana flood basalts: rapid extrusion hypothesis confirmed by new 40Ar/39Ar results. Geology 38, 747-750, doi 10.1130/G30919.1. | Host basalt age 134.7 +/- 1 Ma, short eruption | **Read**: abstract and introduction (PDF from a Durham mantle-plumes page) |
+| Gomes & Vasconcelos (compilation of Parana-Etendeka Ar-Ar and U-Pb ages; Earth-Science Reviews) | Main phase 1.6-3.0 Myr from 135.0 +/- 0.6 Ma | Search summary only (UNVERIFIED); full reference not seen |
+| Vasconcelos, P.M. (1998) 40Ar/39Ar dating of celadonite and the formation of amethyst geodes in the Parana Continental Flood Basalt Province. AGU Fall Meeting, abstract F933. | Possible age of geode mineralisation | Title only (via Mindat reference list); no number read |
+| Gilg, H.A. et al. (2014) Mineralisation of amethyst-bearing geodes in Ametista do Sul (Brazil) from low-temperature sedimentary brines: evidence from monophase liquid inclusions and stable isotopes. Mineralium Deposita 49, 861-877. | Temperatures, fluid origin, mineral sequence | Title confirmed; open access in BORIS (Bern) but behind a bot check: not read |
+| Morteani, G. et al. (2010) The genesis of the amethyst geodes at Artigas (Uruguay) and the paleohydrology of the Guarani aquifer. (journal not confirmed) | Uruguayan geodes | Title only |
+| Gratz, A.J., Bird, P. & Quiro, G.B. (1990) Dissolution of quartz in aqueous basic solution, 106-236 C: surface kinetics of perfect crystallographic faces. GCA 54, 2911-2922, doi 10.1016/0016-7037(90)90109-X | Face-specific dissolution rates (prism vs mean rhombohedron) | Abstract only (OSTI record) |
+| Ihinger & Zink (2000) Nature 404, doi 10.1038/35009091 (title not seen) | Relative face growth rates in a natural crystal | Title and summary only |
+| Synthetic quartz growth-rate anisotropy papers (J. Crystal Growth, 1997-2001; Z-cut seeds, Na2CO3) | m slowest, c about 150x faster than m | Search summaries only; authors not seen |
+| Libbrecht, K.G. (2019, 2021) Snow Crystals. Open book, arXiv:1910.06389 | Berg effect, kinetics- vs diffusion-limited growth (eqs. 3.16-3.25), facet stability rule of thumb, Mullins-Sekerka instability | **Read**: chapter 3 passages (PDF) |
+| Berg, W.F. (1938); Mullins, W.W. & Sekerka, R.F. (1963, 1964) | Berg effect; morphological instability | Cited by Libbrecht; not read |
+| Chernov, A.A. (1974) Stability of faceted shapes. J. Crystal Growth | Facet stability criterion | Not read (cited in search results) |
+| Mindat and dealer pages on skeletal / hoppered amethyst sceptres | Hopper amethyst exists in nature | Web pages, not scientific sources |

@@ -1,0 +1,347 @@
+# Arystal material file: amethyst (alpha-quartz, SiO2, with trace iron).
+#
+# Every constant has: value, units, source, status, note.
+# Status meanings:
+#   VERIFIED             - taken from a source whose text was actually read.
+#   LITERATURE_ESTIMATE  - derived from sources, with the reasoning given in `note`.
+#   UNVERIFIED           - a source exists but only its abstract / a search summary
+#                          was seen, NOT the paper itself. Treat as provisional.
+#   ASSUMED              - no source found; value chosen for a stated reason.
+#
+# First written 2026-10-11. Nothing here is final until marked VERIFIED.
+
+material:
+  name: amethyst
+  chemical_formula: SiO2 (alpha-quartz) with trace Fe
+  crystal_system: trigonal
+  point_group: "32"
+
+crystallography:
+  lattice_a:
+    value: 4.916
+    units: angstrom
+    source: "Levien, Prewitt & Weidner (1980) Am. Mineral. 65, 920-930, 'Structure and elastic properties of quartz at pressure'"
+    status: VERIFIED
+    note: "Read in the PDF (abstract and Table 5): 'Unit-cell parameters are a = 4.916(1) and c = 5.4054(4) A at 1 atm'. Replaced 4.9134 (origin not traced) after the parameter audit (docs/parameter_audit.md, P1). Effect on the face angles: 0.009 deg."
+  lattice_c:
+    value: 5.4054
+    units: angstrom
+    source: "Levien, Prewitt & Weidner (1980), see lattice_a"
+    status: VERIFIED
+    note: "c = 5.4054(4) A at 1 atm, read in the PDF (see lattice_a). Replaced 5.4042."
+  angle_r_pole_to_c_axis:
+    value: 51.78
+    units: degree
+    source: "Computed by us from lattice_a and lattice_c using the hexagonal reciprocal metric for the (10-11) plane."
+    status: LITERATURE_ESTIMATE
+    note: "Matches the ~51.8 deg quoted in the Phase 1 specification (an unpublished planning document). From the Levien (1980) cell: 51.775 deg (old cell 51.784), so the stored two-decimal value is unchanged. Derivation in docs/physics_model.md."
+  angle_m_pole_to_r_pole:
+    value: 38.22
+    units: degree
+    source: "90 deg minus angle_r_pole_to_c_axis (m poles are perpendicular to c)."
+    status: LITERATURE_ESTIMATE
+    note: "Same derivation as above."
+  face_families:
+    value: [m_10-10, r_10-11, z_01-11]
+    units: miller_bravais_indices
+    source: "Phase 1 specification, section 2.1 (unpublished planning document by the project owner)."
+    status: UNVERIFIED
+    note: "Habit of geode amethyst (rhombohedral terminations dominate, short prisms) still to be confirmed in the literature."
+
+thermodynamics:
+  quartz_solubility_log10_molal_A:
+    value: -1107.12
+    units: kelvin
+    source: "Takeno, Ishido & Pritchett (2000) 'Dissolution, transport and precipitation of silica in geothermal system', Proc. World Geothermal Congress 2000, eq. (3): log K = -0.0254 - 1107.12/T for quartz, citing Rimstidt (1997) Geochim. Cosmochim. Acta 61, 2553-2558."
+    status: VERIFIED
+    note: "Read in full in Takeno et al. (2000), a secondary source quoting Rimstidt (1997); the original Rimstidt paper itself was not read. Form: log10(m) = a / T + b, m in mol/kg, T in kelvin (activity of H4SiO4 taken as unity there). Earlier cross-check: 10.97 ppm at 25 C vs 11.0 +/- 1.1 ppm quoted by Verma."
+  quartz_solubility_log10_molal_B:
+    value: -0.0254
+    units: dimensionless
+    source: "Takeno, Ishido & Pritchett (2000) 'Dissolution, transport and precipitation of silica in geothermal system', Proc. World Geothermal Congress 2000, eq. (3): log K = -0.0254 - 1107.12/T for quartz, citing Rimstidt (1997) Geochim. Cosmochim. Acta 61, 2553-2558."
+    status: VERIFIED
+    note: "Read in full in Takeno et al. (2000), a secondary source quoting Rimstidt (1997); the original Rimstidt paper itself was not read. Form: log10(m) = a / T + b, m in mol/kg, T in kelvin (activity of H4SiO4 taken as unity there). Earlier cross-check: 10.97 ppm at 25 C vs 11.0 +/- 1.1 ppm quoted by Verma."
+  quartz_solubility_valid_range:
+    value: [0, 300]
+    units: celsius
+    source: "Rimstidt (1997)."
+    status: UNVERIFIED
+    note: "Our geode range (15-60 C) is well inside it."
+  quartz_solubility_check_value_25C:
+    value: 11.0
+    units: ppm_SiO2
+    source: "Verma, M.P. 'Revised quartz solubility temperature dependence equation along the water-vapor saturation curve' (PDF read in full), quoting Rimstidt (1997): 11.0 +/- 1.1 ppm at 25 C."
+    status: VERIFIED
+    note: "Verified only as a statement made by Verma. Used as the target of validation check 4."
+  alternative_solubility_curve:
+    value: "Fournier & Potter (1982), polynomial"
+    units: none
+    source: "Fournier, R.O. & Potter, R.W. (1982) Geochim. Cosmochim. Acta 46, 1969-1973."
+    status: UNVERIFIED
+    note: "Named by the spec as a candidate. Verma says Fournier & Potter accepted 6.6 +/- 1 ppm at 25 C, versus Rimstidt's 11.0, so the choice of curve matters at geode temperatures. Rimstidt chosen as primary: it is based on direct low-temperature experiments. Fournier & Potter kept only as a sensitivity comparison."
+  molar_mass_SiO2:
+    value: 60.0843
+    units: g/mol
+    source: "CIAAW (2024) Standard Atomic Weights, ciaaw.org/atomic-weights.htm: Si [28.084, 28.086], O [15.99903, 15.99977]."
+    status: LITERATURE_ESTIMATE
+    note: "Computed: Si + 2 O gives 60.082 to 60.086 g/mol from the CIAAW intervals; 60.0843 lies inside. CIAAW page read through a web-fetch tool quoting the rows (parameter audit, P2)."
+  density_quartz:
+    value: 2.646
+    units: g/cm3
+    source: "Computed from the 1 atm unit cell of Levien, Prewitt & Weidner (1980) (a = 4.916, c = 5.4054 A, V = 113.13 A3), Z = 3 formula units per cell, and CIAAW (2024) atomic weights."
+    status: LITERATURE_ESTIMATE
+    note: "rho = Z M / (N_A V) = 2.646 g/cm3. Z = 3 for alpha-quartz is standard crystallography, not read in Levien's text. Replaced 2.65 (textbook, not looked up) after the parameter audit (P3): -0.16% in the mass estimate and the real crystal capacity, +0.16% in the kinetic time. A handbook table would make it VERIFIED."
+
+environment:
+  geode_temperature_min:
+    value: 15
+    units: celsius
+    source: "Arduin Rode et al. (2024) 'World-class amethyst-agate geodes from Los Catalanes, northern Uruguay: genetic implications from fluid inclusions and stable isotopes', Mineralium Deposita."
+    status: UNVERIFIED
+    note: "Abstract only (DOI 10.1007/s00126-024-01310-2; paywalled): news release, abstract and search summary seen (nucleation-assisted microthermometry of one-phase inclusions). The summary names Arduin Rode as lead author, I could not open the paper itself (publisher redirect)."
+  geode_temperature_max:
+    value: 60
+    units: celsius
+    source: "Same as geode_temperature_min."
+    status: UNVERIFIED
+    note: "Allowed range of the temperature parameter. Summary says fluids were meteoric-like, salinity from pure water up to ~3 wt% NaCl-eq (ignored in the model). Other Brazilian settings (veins/pegmatites, 82-391 C) are NOT geodes and are out of scope. A Brazilian-basalt-geode temperature study still needs to be found."
+  fluid_salinity:
+    value: 0
+    units: wt_percent_NaCl_eq
+    source: "Same as geode_temperature_min (range 0 to ~3)."
+    status: ASSUMED
+    note: "Set to pure water so that the Rimstidt curve (pure-water solubility) applies directly."
+  fluid_ph_min:
+    value: 7.0
+    units: pH
+    source: "Revista Aguas Subterraneas articles on the Serra Geral basalt aquifer (present-day groundwater pH 6.69-9.95 and 6.9-9.7), seen in search summaries."
+    status: UNVERIFIED
+    note: "Allowed range of the optional fluid pH used by the pH-dependent rate law (kinetic time only). No pH measurement of the fluid that grew geode amethyst was found; present-day groundwater is only a plausible bracket. Below 7 the base term is negligible."
+  fluid_ph_max:
+    value: 10.0
+    units: pH
+    source: "Same as fluid_ph_min."
+    status: UNVERIFIED
+    note: "See fluid_ph_min."
+
+transport:
+  silica_diffusivity_in_water:
+    value: 1.0e-9
+    units: m2/s
+    source: "Rebreanu, Vanderborght & Chou (2008) 'The diffusion coefficient of dissolved silica revisited', Marine Chemistry 112, 230-233, Table 1 (salinity 0): 0.85, 1.00, 1.17 x 1e-5 cm2/s at 15, 20, 25 C."
+    status: LITERATURE_ESTIMATE
+    note: "Value kept (equals their 20 C measurement, pH about 8.1). Measured only at 2-30 C; they report a factor 2-3 over that range (Stokes-Einstein); not extrapolated to 60 C here. Enters only the diagnostic time_diffusion_hours: the model's own diffusivity is 1 in model units, and on the plateau the shape does not depend on it (parameter audit, P4 and F2)."
+
+kinetics:
+  quartz_rate_constant_log10_A:
+    value: -0.7324
+    units: log10(mol m-2 s-1)
+    source: "Takeno, Ishido & Pritchett (2000), eq. (6): log k+(quartz) = -0.7324 - 3705.12/T, recalculated by them from the data revised by Rimstidt (1997); based on Rimstidt & Barnes (1980)."
+    status: VERIFIED
+    note: "Read in full (secondary source). k+ is the DISSOLUTION rate constant per unit reactive surface; the net precipitation rate per unit area is k+ * (Q/K - 1) = k+ * (S - 1). Valid for neutral dilute solutions (pH and salinity effects neglected by the source) and the vapor-liquid saturation curve. Rimstidt & Barnes (1980): first page read; their precipitation constant of all silica phases is log k- = -0.707 - 2598/T, and -0.707 + (-0.0254) = -0.7324, i.e. this k+ = k- x K(Rimstidt 1997), checked digit by digit (docs/kinetic_regime.md, section 10). At 15 C k+ = 2.6e-14 mol m-2 s-1, at 60 C 1.4e-12. Not face-specific. No pH term: Palandri & Kharaka (2004) give a base term that can raise the rate up to about 300x at pH 10 and 60 C (kinetic_regime.md section 10; not implemented)."
+  quartz_rate_constant_log10_B:
+    value: -3705.12
+    units: kelvin
+    source: "Takeno et al. (2000), eq. (6)."
+    status: VERIFIED
+    note: "See quartz_rate_constant_log10_A. -3705.12 = -2598 (Rimstidt & Barnes 1980, precipitation constant, read on their first page) - 1107.12 (Rimstidt 1997 solubility). Implied activation energy 70.9 kJ/mol for k+; the 49.8 kJ/mol of Rimstidt & Barnes belongs to k- (all silica phases): no contradiction (kinetic_regime.md section 10)."
+  quartz_rate_law:
+    value: "net precipitation rate per unit surface = k+ * (Q/K - 1), Q = molality of H4SiO4, K = solubility constant"
+    units: mol m-2 s-1
+    source: "Takeno et al. (2000), eq. (1): d m / d t = k+ (A/M) (1 - Q/K), A reactive surface area, M mass of solution."
+    status: VERIFIED
+    note: "Read in full (secondary source). Surface-reaction rate law of transition-state type, first order in the departure from equilibrium; no nucleation or spiral-growth threshold, no pH dependence (see the Palandri & Kharaka entries below for the optional pH law)."
+  quartz_rate_neutral_log10_k25:
+    value: -13.40
+    units: log10(mol m-2 s-1)
+    source: "Palandri, J.L. & Kharaka, Y.K. (2004) 'A compilation of rate parameters of water-mineral interaction kinetics for application to geochemical modeling', USGS Open-File Report 2004-1068, Table 4 (quartz), eq. (6)."
+    status: VERIFIED
+    note: "Neutral mechanism, geometric surface area, rate constant at 25 C, read on the rendered Table 4. Used only when a run gives a fluid pH (otherwise the Takeno law above is used). Rate per unit area = (k_neutral + k_base) (1 - Q/K) with p = q = 1, as assumed by the source; for growth this gives (k_neutral + k_base) (S - 1)."
+  quartz_rate_neutral_activation_energy:
+    value: 90.9
+    units: kJ/mol
+    source: "Palandri, J.L. & Kharaka, Y.K. (2004) 'A compilation of rate parameters of water-mineral interaction kinetics for application to geochemical modeling', USGS Open-File Report 2004-1068, Table 4 (quartz), eq. (6)."
+    status: VERIFIED
+    note: "Activation energy of the neutral term (Table 4, geometric area). Differs from the 71 kJ/mol implied by the Takeno law (docs/kinetic_regime.md section 10)."
+  quartz_rate_base_log10_k25:
+    value: -16.29
+    units: log10(mol m-2 s-1) at pH 0
+    source: "Palandri, J.L. & Kharaka, Y.K. (2004) 'A compilation of rate parameters of water-mineral interaction kinetics for application to geochemical modeling', USGS Open-File Report 2004-1068, Table 4 (quartz), eq. (6). Base term from Knauss & Wolery (1988), not read."
+    status: VERIFIED
+    note: "Value as printed. INCONSISTENT in the source: -16.29 is what A = 491 gives with E = 108.4 kJ/mol, but the footnote says A was adjusted to 10, which gives -17.98 (a factor of about 50 slower). The printed log k is used; the alternative is reported in kinetic_regime.md section 10."
+  quartz_rate_base_activation_energy:
+    value: 108.366
+    units: kJ/mol
+    source: "Palandri, J.L. & Kharaka, Y.K. (2004) 'A compilation of rate parameters of water-mineral interaction kinetics for application to geochemical modeling', USGS Open-File Report 2004-1068, Table 4 (quartz), eq. (6)."
+    status: VERIFIED
+    note: "Printed as 108366 in a column headed kJ/mol; read as 108366 J/mol = 108.366 kJ/mol (the only reading consistent with log k = -16.29 and A = 491)."
+  quartz_rate_base_order_in_h_plus:
+    value: -0.5
+    units: dimensionless
+    source: "Palandri, J.L. & Kharaka, Y.K. (2004) 'A compilation of rate parameters of water-mineral interaction kinetics for application to geochemical modeling', USGS Open-File Report 2004-1068, Table 4 (quartz), eq. (6)."
+    status: VERIFIED
+    note: "Reaction order n in a_H+^n: the base term grows 10^0.5 = 3.16 times per pH unit. Measured for dissolution; using it for precipitation assumes microscopic reversibility (p = q = 1). Sodium catalysis (Dove and co-workers) not included."
+
+iron:
+  sector_iron_ratio_r_over_z:
+    value: ">1 (qualitative only)"
+    units: none
+    source: "Cohen, A.J. & Hassan, F. (1974) 'Ferrous and ferric ions in synthetic alpha-quartz and natural amethyst', Am. Mineral. 59, 719-728 (PDF read), citing X-ray topography by Schlossin & Lang (1965)."
+    status: VERIFIED
+    note: "Quote: 'iron in the r sectors exceeded that in the z sectors'. Also: iron in Dauphine-twinned parts of r sectors was below the sector average. No numbers given."
+  iron_in_m_sector:
+    value: unknown
+    units: none
+    source: "None found yet."
+    status: ASSUMED
+    note: "No source found on iron in the m (prism) sectors. Plan: assume low incorporation relative to r. Revisited with the iron model (iron section below)."
+  boudi_morocco_zoning:
+    value: "iron incorporated preferentially along rhombohedral faces (hourglass zoning)"
+    units: none
+    source: "Troilo, El Harfi, Mouaddib, Bittarello & Costa (2015) 'Amethyst from Boudi, Morocco', Gems & Gemology 51(1)."
+    status: VERIFIED
+    note: "Read via fetched page text. Qualitative; supports r > m."
+  color_mechanism:
+    value: "iron color centers activated by ionizing radiation"
+    units: none
+    source: "Cohen & Hassan (1974) (read): iron alone is not sufficient; high-energy radiation also needed. Troilo et al. (2015) names an Fe4+ interstitial center."
+    status: VERIFIED
+    note: "Consequence for the model: color is NOT linear in iron content (Cohen & Hassan note the lack of quantitative correlation). Mapping iron -> color will be ASSUMED and documented with the iron model."
+  partition_coefficient_r:
+    value: 0.01
+    units: mol_Fe_per_mol_Si_ratio
+    source: "None."
+    status: ASSUMED
+    note: "Molar distribution coefficient (Fe/Si in the crystal) / (Fe/Si in the fluid) for material grown on r faces. Defined per unit of silica deposited, so it does not depend on the scaled crystal capacity of the model. No measured value found; placeholder chosen so the crystal Fe/Si ends up in a plausible trace range (see iron_model.color_iron_to_silicon_scale). Relative order r > z > m comes from the qualitative sources above (Cohen & Hassan 1974; Troilo et al. 2015)."
+  partition_coefficient_z:
+    value: 0.005
+    units: mol_Fe_per_mol_Si_ratio
+    source: "None."
+    status: ASSUMED
+    note: "Same definition as partition_coefficient_r. Half of r only to respect r > z (Cohen & Hassan 1974, qualitative); the factor 2 is invented."
+  partition_coefficient_m:
+    value: 0.001
+    units: mol_Fe_per_mol_Si_ratio
+    source: "None."
+    status: ASSUMED
+    note: "Same definition as partition_coefficient_r. Lowest, by assumption: no source on iron in the m (prism) sectors; Troilo et al. (2015) say iron is preferentially incorporated along rhombohedral faces. The factor 10 below r is invented."
+
+phase_field_model:
+  formulation:
+    value: "Faceted phase-field with rounded-cusp gamma-plot"
+    units: none
+    source: "Debierre, Karma, Celestini & Guerin (2003) Phys. Rev. E 68, 041604, 'Phase-field approach for faceted solidification' (arXiv cond-mat/0302368)."
+    status: UNVERIFIED
+    note: "Abstract and search summary seen only. Approach: approximate the sharp-cusped surface-energy plot with rounded cusps so that facets appear while the equations stay well-posed. Not implemented: the engine uses kinetic anisotropy instead (docs/physics_model.md). Full paper not read."
+  interface_width_in_grid_cells:
+    value: 6
+    units: grid_cells
+    source: "Common phase-field practice."
+    status: ASSUMED
+    note: "10%-90% width of the interface. 6 cells corresponds to a length scale epsilon of about 1 cell; narrower interfaces make the front 'stick' to the grid. Numerical choice; its effect is part of the resolution convergence study (check 5, docs/regime_study.md section 3). Changed from 4 to 6 early in development."
+
+model_scaling:
+  solid_silica_capacity_model:
+    value: 0.002
+    units: mol/kg
+    source: "None. Model choice (see note)."
+    status: ASSUMED
+    note: "Extra silica held by one unit volume of crystal compared with the same volume of fluid, as used INSIDE the model. The real value is about 44 mol/kg (density/molar mass of quartz, ~2.65 g/cm3 / 60.08 g/mol), about 20000 times larger. With the real value a closed cavity cooled from 60 to 15 C could only deposit crystal filling ~0.001% of its volume, so no visible crystal would form; real geodes are replenished with fluid repeatedly. The scaled value lets a closed model container grow a crystal that fills ~10-20% of it. Consequence: model time is NOT physical time; see docs/physics_model.md (time conversion)."
+  kinetic_coupling:
+    value: 0.2
+    units: dimensionless
+    source: "None. Model choice."
+    status: ASSUMED
+    note: "Lambda in m = lambda * ln(c / c_eq): converts the thermodynamic driving force ln(c/c_eq) into the dimensionless tilt m of the phase-field double well. Larger = interface attaches silica faster relative to diffusion. Originally chosen so interface kinetics were faster than diffusion (supply-limited); since the regime study the regime is set by tau on the plateau instead. On the plateau the shape still depends on lambda through the capillary length (docs/regime_study.md, section 2)."
+  max_driving_force:
+    value: 0.3
+    units: dimensionless
+    source: "Numerical limit of the double-well model."
+    status: ASSUMED
+    note: "|m| must stay below 0.5, otherwise the fluid state phi=0 becomes unstable and crystal would appear everywhere. 0.3 leaves a safety margin."
+
+anisotropy:
+  facet_speed_m:
+    value: 0.5
+    units: relative_to_fastest_face
+    source: "None found (a literature search for quantitative m:r:z growth-rate ratios returned only qualitative sector information)."
+    status: ASSUMED
+    note: "Normal growth speed of the prism face m relative to the fastest face (r, z = 1). m slower than r/z is what makes the rhombohedral terminations large and the prism a limited stalk; the numeric ratio 0.5 is a model choice. IMPOSES the aspect ratio of the simulated crystal; it is NOT a prediction."
+  facet_speed_r:
+    value: 1.0
+    units: relative_to_fastest_face
+    source: "None."
+    status: ASSUMED
+    note: "Normal growth speed of the r face {10-11}; sets the time unit of the anisotropic model (fastest face = 1)."
+  facet_speed_z:
+    value: 1.0
+    units: relative_to_fastest_face
+    source: "None."
+    status: ASSUMED
+    note: "Normal growth speed of the z face {01-11}. Set equal to r by default, which makes the 2D section mirror-symmetric. In real quartz r and z are not equivalent (they differ in iron uptake, Cohen & Hassan 1974), so equality is a simplification."
+  cusp_sharpness:
+    value: 40.0
+    units: 1/relative_speed
+    source: "Numerical regularization, in the spirit of rounded-cusp phase-field models for faceted growth (Debierre et al. 2003, UNVERIFIED)."
+    status: ASSUMED
+    note: "Beta of the smooth-maximum that rounds the cusps of the speed-versus-orientation curve. Larger = flatter facets but a stiffer numerical problem. Rounds the cusp over about 1-2 degrees."
+
+iron_model:
+  iron_molar_mass:
+    value: 55.845
+    units: g/mol
+    source: "CIAAW (2024) Standard Atomic Weights, ciaaw.org/atomic-weights.htm: Fe 55.845(2)."
+    status: VERIFIED
+    note: "Read on the CIAAW page through a web-fetch tool quoting the row (parameter audit, P2). Used to convert ppm by mass into mol/kg."
+  default_fluid_iron:
+    value: 1.0
+    units: ppm_by_mass
+    source: "None."
+    status: ASSUMED
+    note: "Default dissolved iron in the fluid (mg per kg of water). No measurement for geode fluids found. Iron is treated as a TRACE: it does not change growth, silica supply or solubility."
+  iron_diffusivity_ratio:
+    value: 0.7
+    units: dimensionless
+    source: "Order of magnitude for dissolved Fe2+ relative to silicic acid in water (about 0.7e-9 vs 1e-9 m2/s)."
+    status: ASSUMED
+    note: "Ratio D_Fe / D_Si in the fluid. No source read. Barely matters because the iron supply is not limiting in the regimes considered."
+  sector_transition_width:
+    value: 12.0
+    units: degree
+    source: "Numerical choice."
+    status: ASSUMED
+    note: "Width (Gaussian, in surface-normal angle) over which the incorporation coefficient passes smoothly from one face family to the next. A smooth transition keeps the model symmetric and well-behaved; the real sector boundaries are sharp lines where faces meet."
+  color_iron_to_silicon_scale:
+    value: 4.0e-4
+    units: mol_Fe_per_mol_Si_ratio
+    source: "None. Model choice."
+    status: ASSUMED
+    note: "Fe/Si ratio of the crystal at which the rendered colour reaches 63% of full amethyst colour (saturating law: intensity = 1 - exp(-ratio / scale)). Colour is NOT linear in iron: iron alone does not give amethyst colour, natural irradiation is also needed (Cohen & Hassan 1974); the model assumes a uniform, sufficient irradiation dose. 4e-4 mol/mol corresponds to about 370 ppm Fe by mass, a plausible order for iron-bearing quartz but not checked against a source."
+
+stochastic:
+  thermal_noise_amplitude:
+    value: 0.02
+    units: dimensionless
+    source: "None. Modelling device."
+    status: ASSUMED
+    note: "Strength sigma of a random term added to the phase field at the interface: dphi = sigma * sqrt(dt) * 4 phi (1 - phi) * N(0,1). Real thermal fluctuations are negligible at millimetre scale; the term stands in for all small random irregularities (surface defects, local fluid variations) so that replicas with different seeds differ slightly, as real crystals do. Its size sets how different replicas are and is NOT calibrated against any observation."
+  seed_radius_variation:
+    value: 0.05
+    units: fraction
+    source: "None. Modelling device."
+    status: ASSUMED
+    note: "Relative standard deviation of the initial seed radius between runs (random, set by the seed). Not calibrated."
+  seed_offset_std:
+    value: 1.0
+    units: grid_cells
+    source: "None. Modelling device."
+    status: ASSUMED
+    note: "Standard deviation (cells) of the horizontal position of the initial seed between runs. Breaks the exact left-right symmetry slightly, like a real nucleus. Not calibrated."
+
+mass_estimate:
+  assumed_thickness:
+    value: 10.0
+    units: mm
+    source: "None. Assumption."
+    status: ASSUMED
+    note: "The 2D section is turned into a mass by multiplying its area by an assumed thickness (perpendicular to the section) and by the real density of quartz. A real crystal is 3D and its thickness varies; this number is arbitrary and only gives the order of magnitude. It is a mass of the crystal's geometry at real density, not the silica budget of the (scaled) model."

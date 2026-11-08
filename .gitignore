@@ -1,0 +1,12 @@
+.venv/
+results/*
+!results/.gitkeep
+__pycache__/
+*.pyc
+.DS_Store
+
+# Private working notes and data, never published
+CLAUDE.md
+AGENTS.md
+PHASE1_SPEC.md
+observations/

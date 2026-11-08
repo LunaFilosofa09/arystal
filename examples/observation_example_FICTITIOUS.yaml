@@ -1,0 +1,44 @@
+# FICTITIOUS EXAMPLE -- invented numbers, ONLY to test scripts/compare_with_observation.py.
+# Nothing about the model can be concluded from it. Real samples go in their own file (template: docs/observation_comparison.md, section 5).
+sample_id: EXAMPLE_FICTITIOUS
+source: "Invented for a code test; not a real crystal"
+fictitious: true
+approved_by_luna: false
+image: null
+measurements:
+  aspect_ratio:
+    value: 1.10
+    uncertainty: 0.08
+    units: dimensionless
+    role: calibration          # pretend m:r:z was tuned to this sample's aspect ratio
+    how_measured: "length along c / width, from a photo with scale (invented)"
+  face_ratio_r_over_m:
+    value: 1.50
+    uncertainty: 0.10
+    units: dimensionless
+    role: check
+    how_measured: "invented"
+  angle_m_to_r_degrees:
+    value: 141.5
+    uncertainty: 1.5
+    units: degree
+    role: check
+    how_measured: "protractor on a photo perpendicular to the section (invented)"
+  apex_angle_r_to_z_degrees:
+    value: 76.0
+    uncertainty: 1.5
+    units: degree
+    role: check
+    how_measured: "invented"
+  sector_share_m:
+    value: 0.25
+    uncertainty: 0.05
+    units: fraction of section area
+    role: check
+    how_measured: "invented"
+  color_contrast_r_over_m:
+    value: 3.0
+    uncertainty: 0.8
+    units: ratio of colour intensities
+    role: check
+    how_measured: "invented"

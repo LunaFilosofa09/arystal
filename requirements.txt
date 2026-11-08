@@ -1,0 +1,9 @@
+numpy
+numba==0.61.2  # newest numba has no prebuilt wheel for Intel Macs
+scipy
+pyyaml
+matplotlib
+fastapi
+uvicorn
+websockets  # WebSocket support for uvicorn
+httpx  # test client of FastAPI (validation checks)

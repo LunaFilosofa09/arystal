@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Arystal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* Minimal page to test the server. It is NOT the real frontend. */
+  body { font-family: system-ui, sans-serif; margin: 16px; max-width: 1100px; }
+  fieldset { margin-bottom: 12px; }
+  label { display: inline-block; margin: 2px 10px 2px 0; }
+  input[type=number] { width: 80px; }
+  .pictures { display: flex; gap: 12px; flex-wrap: wrap; }
+  .pictures figure { margin: 0; }
+  .pictures img { border: 1px solid #aaa; image-rendering: pixelated; width: 420px; background: #fff; }
+  canvas { border: 1px solid #aaa; background: #fff; margin-right: 8px; }
+  #status { font-weight: bold; margin: 8px 0; }
+  table { border-collapse: collapse; } td, th { border: 1px solid #ccc; padding: 2px 8px; text-align: left; }
+  button { margin-right: 4px; }
+</style>
+</head>
+<body>
+<h2>Arystal</h2>
+
+<fieldset>
+  <legend>Start a simulation</legend>
+  <label>T (&deg;C) <input id="temperature" type="number" value="40" min="15" max="60" step="0.5"></label>
+  <label>saturated at (&deg;C) <input id="saturation" type="number" value="60" min="15" max="60" step="0.5"></label>
+  <label>iron (ppm) <input id="iron" type="number" value="1" min="0" step="0.1"></label>
+  <label>mode <select id="mode"><option value="explore">explore (200x100, fast, qualitative)</option><option value="research">research (800x400, converged)</option></select></label>
+  <label>seed <input id="seed" type="number" value="0" min="0"></label>
+  <button id="start">Start</button>
+</fieldset>
+
+<fieldset>
+  <legend>Live control</legend>
+  <button id="pause">Pause</button><button id="resume">Resume</button><button id="stop">Stop and save</button>
+  <label>T slider <input id="temperatureSlider" type="range" min="15" max="60" step="0.5" value="40"> <span id="temperatureValue">40</span></label>
+  <label>Fe slider <input id="ironSlider" type="range" min="0" max="5" step="0.1" value="1"> <span id="ironValue">1</span></label>
+  <div id="status">no job</div>
+</fieldset>
+
+<div class="pictures">
+  <figure><figcaption>Crystal (colour = incorporated iron)</figcaption><img id="crystal" alt="crystal"></figure>
+  <figure><figcaption>Supersaturation S &minus; 1 (red = growth, blue = dissolution)</figcaption><img id="supersaturation" alt="supersaturation"></figure>
+</div>
+
+<h3>Metrics</h3>
+<canvas id="areaChart" width="340" height="180"></canvas>
+<canvas id="aspectChart" width="340" height="180"></canvas>
+<canvas id="superChart" width="340" height="180"></canvas>
+
+<h3>Past results</h3>
+<button id="refresh">Refresh list</button>
+<table id="results"><thead><tr><th>name</th><th>kind</th><th>area (mm&sup2;)</th><th></th></tr></thead><tbody></tbody></table>
+
+<script>
+let socket = null;
+const history = [];                      // one point per frame: {time, area, aspect, sInterface, sBulk}
+const $ = (id) => document.getElementById(id);
+
+function send(command) { if (socket && socket.readyState === 1) socket.send(JSON.stringify(command)); }
+
+async function startJob() {
+  const body = {
+    temperature_celsius: +$("temperature").value, saturation_temperature_celsius: +$("saturation").value,
+    iron_ppm: +$("iron").value, seed: +$("seed").value, mode: $("mode").value,
+  };
+  const response = await fetch("/jobs", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+  if (!response.ok) { $("status").textContent = "error: " + JSON.stringify(await response.json()); return; }
+  const job = await response.json();
+  history.length = 0;
+  $("temperatureSlider").value = body.temperature_celsius; $("ironSlider").value = body.iron_ppm;
+  openStream(job.job_id);
+}
+
+function openStream(jobId) {
+  if (socket) socket.close();
+  socket = new WebSocket(`ws://${location.host}/jobs/${jobId}/stream`);
+  socket.onmessage = (event) => {
+    const message = JSON.parse(event.data);
+    if (message.type === "frame") showFrame(message, jobId);
+    if (message.type === "end") { $("status").textContent = `job ${jobId}: ${message.status} ${message.folder || ""} ${message.error ? "ERROR" : ""}`; loadResults(); }
+  };
+}
+
+function showFrame(frame, jobId) {
+  $("crystal").src = "data:image/png;base64," + frame.crystal_png;
+  $("supersaturation").src = "data:image/png;base64," + frame.supersaturation_png;
+  const m = frame.metrics;
+  $("status").textContent = `job ${jobId} [${frame.status}] step ${frame.step}  time ${frame.time.toFixed(0)} / ${frame.duration.toFixed(0)}  T ${frame.temperature_celsius}  area ${m.crystal_area_mm2.toFixed(1)} mm2`;
+  history.push({time: frame.time, area: m.crystal_area_mm2, aspect: m.aspect_ratio, sI: m.supersaturation_interface, sB: m.supersaturation_bulk});
+  drawChart($("areaChart"), "area (mm2)", [["area", "#6a1b9a"]]);
+  drawChart($("aspectChart"), "aspect ratio", [["aspect", "#00695c"]]);
+  drawChart($("superChart"), "S: interface / bulk", [["sI", "#c62828"], ["sB", "#1565c0"]]);
+}
+
+function drawChart(canvas, title, series) {
+  const g = canvas.getContext("2d"); g.clearRect(0, 0, canvas.width, canvas.height);
+  const values = series.flatMap(([key]) => history.map((p) => p[key])).filter((v) => v !== null && isFinite(v));
+  g.fillStyle = "#000"; g.font = "11px sans-serif"; g.fillText(title, 6, 12);
+  if (values.length < 2) return;
+  const lo = Math.min(...values), hi = Math.max(...values) || 1, tMax = history[history.length - 1].time || 1;
+  series.forEach(([key, color]) => {
+    g.strokeStyle = color; g.beginPath();
+    history.forEach((p, i) => {
+      if (p[key] === null || !isFinite(p[key])) return;
+      const x = 30 + (canvas.width - 40) * p.time / tMax, y = canvas.height - 14 - (canvas.height - 34) * (p[key] - lo) / ((hi - lo) || 1);
+      i === 0 ? g.moveTo(x, y) : g.lineTo(x, y);
+    });
+    g.stroke();
+  });
+  g.fillStyle = "#555"; g.fillText(hi.toPrecision(3), 2, 24); g.fillText(lo.toPrecision(3), 2, canvas.height - 14);
+}
+
+async function loadResults() {
+  const rows = await (await fetch("/results")).json();
+  $("results").querySelector("tbody").innerHTML = rows.map((r) => {
+    const area = r.kind === "run" ? r.crystal_area_mm2.toFixed(1) : `${r.crystal_area_mm2_mean.toFixed(1)} &plusmn; ${(r.crystal_area_mm2_std || 0).toFixed(1)}`;
+    const image = r.kind === "run" ? "final_image.png" : "comparison.png";
+    const ensembleButton = r.kind === "run" ? `<button onclick="launchEnsemble('${r.name}')">10 replicas</button>` : "";
+    return `<tr><td>${r.name}</td><td>${r.kind}</td><td>${area}</td><td><a href="/results/${r.name}/files/${image}" target="_blank">picture</a> <a href="/results/${r.name}" target="_blank">json</a> ${ensembleButton}</td></tr>`;
+  }).join("");
+}
+
+async function launchEnsemble(name) {
+  const response = await fetch("/ensembles", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({source: name})});
+  $("status").textContent = response.ok ? "ensemble started (see the results list when it finishes)" : "error: " + JSON.stringify(await response.json());
+}
+
+$("start").onclick = startJob;
+$("pause").onclick = () => send({command: "pause"});
+$("resume").onclick = () => send({command: "resume"});
+$("stop").onclick = () => send({command: "stop"});
+$("temperatureSlider").oninput = (e) => { $("temperatureValue").textContent = e.target.value; };
+$("temperatureSlider").onchange = (e) => send({command: "set", parameter: "temperature_celsius", value: +e.target.value});
+$("ironSlider").oninput = (e) => { $("ironValue").textContent = e.target.value; };
+$("ironSlider").onchange = (e) => send({command: "set", parameter: "iron_ppm", value: +e.target.value});
+$("refresh").onclick = loadResults;
+loadResults();
+</script>
+<p style="color:#777;font-size:12px;margin-top:24px">Arystal &middot; version 1 &middot; exploratory tool</p>
+</body>
+</html>
